@@ -8,7 +8,9 @@
 >
 > *Corresponding author: Vikas_Srivastava@brown.edu
 
-This repository contains the code and data for the paper *"Drug Release Modeling using Physics-Informed Neural Networks," Journal of Drug Delivery Science and Technology, 108654, 2026. * 
+This repository contains the code and data for the paper "Drug Release Modeling using Physics-Informed Neural Networks," Journal of Drug Delivery Science and Technology, 108654, 2026. It is expected that proper citations and acknowledgement of the source method and code is provided. 
+
+https://doi.org/10.1016/j.jddst.2026.108654
 
 ## Abstract
 
