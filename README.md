@@ -8,16 +8,15 @@
 >
 > *Corresponding author: Vikas_Srivastava@brown.edu
 
-This repository contains the code and data for the paper "Drug Release Modeling using Physics-Informed Neural Networks," Journal of Drug Delivery Science and Technology, 108654, 2026. It is expected that proper citations and acknowledgement of the source method and code is provided. 
+This repository contains the code and data for the paper "Drug Release Modeling using Physics-Informed Neural Networks," Journal of Drug Delivery Science and Technology, 108654, 2026. 
 
 https://doi.org/10.1016/j.jddst.2026.108654
+Please exercise proper citation and acknowledgement of the source method and code. 
 
 ## Abstract
-
 Accurate modeling of drug release is essential for designing and developing controlled-release systems. Classical models (Fick, Higuchi, Peppas) rely on simplifying assumptions that limit their accuracy in complex geometries and release mechanisms. Here, we propose a novel approach using Physics-Informed Neural Networks (PINNs) and Bayesian PINNs (BPINNs) for predicting release from planar, 1D-wrinkled, and 2D-crumpled films. This approach uniquely integrates Fick's diffusion law with limited experimental data to enable accurate long-term predictions from short-term measurements, and is systematically benchmarked against classical drug release models.
 
 ## Key Results
-
 - **PINN reduces mean error by up to 40%** relative to classical baselines (Higuchi, Peppas, Fick) across all film types.
 - **RMSE < 0.05 with only the first 6% of release time data** (n = 9 points, corresponding to 2 hours) for the planar film, compared to 12--13 points (1--1.5 days) for classical models.
 - For **1D wrinkled** and **2D crumpled** films, the PINN reaches RMSE < 0.05 at n = 11 (12 hours), saving 12--36 hours of experimental time.
@@ -112,9 +111,9 @@ If you use this code, please cite:
 @article{qureshi2026drug,
   title={Drug Release Modeling using Physics-Informed Neural Networks},
   author={Qureshi, Daanish Aleem and Shukla, Khemraj and Srivastava, Vikas},
-  journal={arXiv preprint arXiv:2602.09963},
+  journal={Journal of Drug Delivery Science and Technology},
   year={2026},
-  url={https://arxiv.org/abs/2602.09963}
+  url={https://doi.org/10.1016/j.jddst.2026.108654}
 }
 ```
 
