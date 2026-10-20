@@ -1,122 +1,64 @@
-# Drug Release Modeling using Physics-Informed Neural Networks
+# Drug release modeling using physics-informed neural networks
 
-> **Daanish Aleem Qureshi<sup>a,b</sup>, Khemraj Shukla<sup>a</sup>, Vikas Srivastava<sup>b,c,*</sup>**
->
-> <sup>a</sup> Division of Applied Mathematics, Brown University
-> <sup>b</sup> School of Engineering, Brown University
-> <sup>c</sup> Institute for Biology, Engineering and Medicine, Brown University
->
-> *Corresponding author: Vikas_Srivastava@brown.edu
+Code and data for
 
-This repository contains the code and data for the paper "Drug Release Modeling using Physics-Informed Neural Networks," Journal of Drug Delivery Science and Technology, 108654, 2026. 
+> D. A. Qureshi, K. Shukla, V. Srivastava, "Drug release modeling using Physics-Informed Neural Networks", *Journal of Drug Delivery Science and Technology* 125 (2026) 108654. [doi:10.1016/j.jddst.2026.108654](https://doi.org/10.1016/j.jddst.2026.108654)
 
-https://doi.org/10.1016/j.jddst.2026.108654
-Please exercise proper citation and acknowledgement of the source method and code. 
+Division of Applied Mathematics, School of Engineering, and Institute for Biology, Engineering and Medicine, Brown University. Corresponding author: Vikas Srivastava (Vikas_Srivastava@brown.edu).
 
-## Abstract
-Accurate modeling of drug release is essential for designing and developing controlled-release systems. Classical models (Fick, Higuchi, Peppas) rely on simplifying assumptions that limit their accuracy in complex geometries and release mechanisms. Here, we propose a novel approach using Physics-Informed Neural Networks (PINNs) and Bayesian PINNs (BPINNs) for predicting release from planar, 1D-wrinkled, and 2D-crumpled films. This approach uniquely integrates Fick's diffusion law with limited experimental data to enable accurate long-term predictions from short-term measurements, and is systematically benchmarked against classical drug release models.
+The paper fits physics-informed neural networks (PINNs) that embed Fick's second law to drug release measurements from planar, 1D wrinkled and 2D crumpled graphene oxide films, and compares them with the Higuchi, Peppas and Fick release models. The article reports that for the planar film the PINN reaches RMSE below 0.05 from the first 4% of the 48 h release data, and that the 1D and 2D films reach the same threshold at n = 11 points. Under added noise, a Bayesian PINN with Monte Carlo dropout (100 forward passes) is compared with an ensemble of 50 PINNs.
 
-## Key Results
-- **PINN reduces mean error by up to 40%** relative to classical baselines (Higuchi, Peppas, Fick) across all film types.
-- **RMSE < 0.05 with only the first 6% of release time data** (n = 9 points, corresponding to 2 hours) for the planar film, compared to 12--13 points (1--1.5 days) for classical models.
-- For **1D wrinkled** and **2D crumpled** films, the PINN reaches RMSE < 0.05 at n = 11 (12 hours), saving 12--36 hours of experimental time.
-- **Bayesian PINNs (BPINNs)** provide tighter and more reliable uncertainty quantification under noisy conditions via Monte Carlo Dropout.
+## Contents
 
-## Repository Structure
+| Path | What it is |
+|------|------------|
+| `drug_release_pinn.ipynb` | The notebook. It writes Figures 3 to 9 to `figures/` |
+| `Data/data.csv` | Release measurements from Liu et al. (2021), see `Data/README.md` |
+| `figures/published/` | Figures 2 to 9 as they appear in the article |
+| `requirements.txt` | The versions the notebook was tested with |
+| `CITATION.cff` | Citation metadata |
 
-```
-├── drug_release_pinn.ipynb              # Main notebook (reproduces all paper figures)
-├── Data/
-│   └── data.csv                         # Experimental release data (Liu et al., 2021)
-├── figures/                             # Generated figures (created by the notebook)
-│   ├── figure_3.png                     # PINN vs classical model release curves
-│   ├── figure_4.png                     # MAE/RMSE bar charts
-│   ├── figure_5.png                     # Spatial concentration profiles u(x,t)
-│   ├── figure_6.png                     # PINN/BPINN uncertainty bounds under noise
-│   ├── figure_7.png                     # MAE/RMSE comparison under noise
-│   ├── figure_8.png                     # Best-case PINN at minimum data points
-│   └── figure_9.png                     # RMSE vs number of data points
-├── requirements.txt                     # Python dependencies
-└── README.md
-```
+Figure 1 of the article is reproduced from Liu et al. (2021) with permission of the American Chemical Society and is not included here. The inverse estimate of effective diffusivity (Section 2.6 and Table 2 of the article) is not part of this repository.
 
-## Quick Start
+## Running it
 
 ```bash
-# Clone the repository
-git clone https://github.com/<username>/drug-release-pinn.git
-cd drug-release-pinn
-
-# Install dependencies
+git clone https://github.com/SrivastavaResearchLab/drug_release_modeling_PINN-2025.git
+cd drug_release_modeling_PINN-2025
+python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-
-# Run the notebook
 jupyter notebook drug_release_pinn.ipynb
 ```
 
-The notebook runs sequentially and produces seven figures saved to `figures/`:
+Start Jupyter from the repository root so the notebook finds `Data/data.csv`. Every random source is seeded, so a rerun on the same versions gives the same numbers.
 
-| Figure | Description | Output File |
-|--------|-------------|-------------|
-| Fig. 3 | PINN vs classical model release curves | `figures/figure_3.png` |
-| Fig. 4 | MAE/RMSE bar charts (classical vs PINN) | `figures/figure_4.png` |
-| Fig. 5 | Spatial concentration profiles u(x,t) at t = 0.0, 0.25, 0.50 | `figures/figure_5.png` |
-| Fig. 6 | PINN and BPINN uncertainty bounds under noise | `figures/figure_6.png` |
-| Fig. 7 | MAE/RMSE comparison under noise (PINN vs BPINN) | `figures/figure_7.png` |
-| Fig. 8 | Best-case PINN predictions at minimum data points n | `figures/figure_8.png` |
-| Fig. 9 | RMSE vs number of training data points | `figures/figure_9.png` |
+## Method
 
-Figures 1 and 2 in the paper are schematic diagrams (film architectures and PINN/BPINN network architectures) and are not generated by the notebook.
+The network takes normalized (x, t) and predicts the concentration u. The loss is the mean squared error on the measurements plus the mean squared residual of Fick's law, f = u_t - D u_xx, at Latin hypercube collocation points. Settings, as in Table 1 of the article:
 
-**Note:** The ensemble PINN (50 models x 5000 epochs) and BPINN (10,000 epochs) sections are computationally intensive. On a standard machine, expect ~1--2 hours total runtime. Sections can be run independently if prior cells have been executed.
-
-## Methods
-
-The approach integrates Fick's second law of diffusion into a neural network loss function alongside experimental drug release measurements:
-
-$$\mathcal{L} = \mathcal{L}_{\text{data}} + \mathcal{L}_{\text{physics}}$$
-
-- **Data loss:** MSE between predicted and measured concentrations
-- **Physics loss:** MSE of the Fick's law residual $f(x,t) = \frac{\partial u}{\partial t} - D \frac{\partial^2 u}{\partial x^2}$ evaluated at 10,000 Latin-hypercube-sampled collocation points
-
-The PINN architecture uses 5 hidden layers with 20 neurons each, tanh activation, and Adam optimization (lr = 1e-3). BPINNs add Monte Carlo Dropout (keep probability = 0.975) for uncertainty quantification.
-
-Three film morphologies are studied using data from Liu et al. (2021):
-- **Planar:** uniform basal-plane diffusion
-- **1D wrinkled:** anisotropic edge-enhanced release
-- **2D crumpled:** isotropic edge-enhanced release
-
-| Parameter | Classical PINN | 50 PINNs Ensemble | BPINN | Limited Data |
-|-----------|---------------|-------------------|-------|-------------|
-| Hidden layers | 5 | 5 | 5 | 5 |
-| Neurons per layer | 20 | 20 | 20 | 20 |
-| Activation | tanh | tanh | tanh + dropout | tanh |
+| Setting | PINN | 50-PINN ensemble | BPINN | Limited data |
+|---------|------|------------------|-------|--------------|
+| Hidden layers x units | 5 x 20 | 5 x 20 | 5 x 20 | 5 x 20 |
+| Activation | tanh | tanh | tanh with dropout, keep probability 0.975 | tanh |
+| Optimizer | Adam, 1e-3 | Adam, 1e-3 | Adam, 1e-3 | Adam, 1e-3 |
 | Epochs | 2,500 | 5,000 | 10,000 | 2,000 |
 | Collocation points | 10,000 | 10,000 | 10,000 | 1,000 |
-| Diffusion coefficient D | 0.01 | 0.01 | 0.01 | 0.01 |
-
-## Data
-
-Experimental drug release data is from:
-
-> M. Liu, D. C. C. Fernandes, Z. S. Saleeba, R. H. Hurt, "Controlled Release of Molecular Intercalants from Two-Dimensional Nanosheet Films," *ACS Nano*, 15(12), 20105--20115, 2021. [DOI: 10.1021/acsnano.1c07954](https://doi.org/10.1021/acsnano.1c07954)
-
-The dataset (`Data/data.csv`) contains cumulative Rhodamine B release concentrations (ppm) at 14 time points over 48 hours for three GO nanosheet film types (planar, 1D wrinkled, 2D crumpled).
+| D | 0.01 | 0.01 | 0.01 | 0.01 |
 
 ## Citation
 
-If you use this code, please cite:
-
 ```bibtex
 @article{qureshi2026drug,
-  title={Drug Release Modeling using Physics-Informed Neural Networks},
-  author={Qureshi, Daanish Aleem and Shukla, Khemraj and Srivastava, Vikas},
-  journal={Journal of Drug Delivery Science and Technology},
-  year={2026},
-  url={https://doi.org/10.1016/j.jddst.2026.108654}
+  title   = {Drug release modeling using Physics-Informed Neural Networks},
+  author  = {Qureshi, Daanish Aleem and Shukla, Khemraj and Srivastava, Vikas},
+  journal = {Journal of Drug Delivery Science and Technology},
+  volume  = {125},
+  pages   = {108654},
+  year    = {2026},
+  doi     = {10.1016/j.jddst.2026.108654}
 }
 ```
 
 ## License
 
-This project is licensed under the MIT License.
+The code is released under the MIT License (`LICENSE`). The measurements in `Data/` belong to Liu et al. (2021). The figures in `figures/published/` are from the article, which is open access under CC BY 4.0.

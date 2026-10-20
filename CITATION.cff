@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite the article."
+title: "Drug release modeling using Physics-Informed Neural Networks"
+authors:
+  - family-names: Qureshi
+    given-names: Daanish Aleem
+  - family-names: Shukla
+    given-names: Khemraj
+  - family-names: Srivastava
+    given-names: Vikas
+license: MIT
+repository-code: "https://github.com/SrivastavaResearchLab/drug_release_modeling_PINN-2025"
+preferred-citation:
+  type: article
+  title: "Drug release modeling using Physics-Informed Neural Networks"
+  authors:
+    - family-names: Qureshi
+      given-names: Daanish Aleem
+    - family-names: Shukla
+      given-names: Khemraj
+    - family-names: Srivastava
+      given-names: Vikas
+  journal: "Journal of Drug Delivery Science and Technology"
+  volume: 125
+  start: 108654
+  year: 2026
+  doi: "10.1016/j.jddst.2026.108654"
